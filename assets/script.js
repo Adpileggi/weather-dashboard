@@ -3,7 +3,7 @@ var citySearchEl = document.querySelector('#city-input');
 var searchBtn = document.querySelector('#search-btn');
 
 var currentWeatherEl = document.querySelector('.current-weather-el');
-var futureWeatherEl = document.querySelector('future-weather-el');
+var futureWeatherEl = document.querySelector('.future-weather-el');
 
 var apiUrl;
 
@@ -48,7 +48,24 @@ function getForcastWeather() {
             // use loop for future weather
             for (var i = 7; i < data.list.length; i+=8) {
                 console.log(data.list[i].main.temp);
-                console.log(data.list[i].dt_txt)
+                console.log(data.list[i].dt_txt);
+
+                var forcastDiv = document.createElement('div');
+                forcastDiv.classList = 'forcast-card'
+                var ul = document.createElement('ul')
+                var forcastDate = document.createElement('li');
+                forcastDate.textContent = (data.list[i].dt_txt);
+                var forcastTemp = document.createElement('li');
+                forcastTemp.textContent = ('Tempature: ' + data.list[i].main.temp);
+
+                forcastDiv.appendChild(ul)
+
+                ul.appendChild(forcastDate);
+                
+                ul.appendChild(forcastTemp);
+
+                futureWeatherEl.appendChild(forcastDiv);
+
             };
         });
 
