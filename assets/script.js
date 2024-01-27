@@ -2,11 +2,14 @@ var citySearchEl = document.querySelector('#city-input');
 
 var searchBtn = document.querySelector('#search-btn');
 
+var HistoryBtnEl = document.querySelector('#search-history-btn');
+
 var currentWeatherEl = document.querySelector('.current-weather-el');
 var futureWeatherEl = document.querySelector('.future-weather-el');
 
 var apiUrl;
 
+displaySearchHistory()
 searchBtn.addEventListener('click', getSearchHandler);
 
 function getSearchHandler(event) {
@@ -37,7 +40,7 @@ function getCurrentWeather() {
 
         })
         getForcastWeather();
-        displaySearchHistory();
+        renderSearchHistory();
 };
 
 function getForcastWeather() {
@@ -72,7 +75,7 @@ function getForcastWeather() {
 
 };
 
-function displaySearchHistory() {
+function renderSearchHistory() {
     var history = citySearchEl.value.trim();
      console.log(history)
 
@@ -88,3 +91,19 @@ function displaySearchHistory() {
 
     displaySearchHistory();
 };
+
+function displaySearchHistory() {
+    var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
+
+    for (var i = 0; i < lastSearch.length; i++) {
+        var displaySearch = []
+        displaySearch = lastSearch[i];
+
+        var lastSearchBtn = document.createElement('button')
+        lastSearchBtn.classList = 'history-btn'
+        lastSearchBtn.textContent = displaySearch
+
+        HistoryBtnEl.appendChild(lastSearchBtn);
+
+    }
+}
