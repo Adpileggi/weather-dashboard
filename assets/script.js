@@ -37,6 +37,7 @@ function getCurrentWeather() {
 
         })
         getForcastWeather();
+        displaySearchHistory();
 };
 
 function getForcastWeather() {
@@ -69,4 +70,21 @@ function getForcastWeather() {
             };
         });
 
+};
+
+function displaySearchHistory() {
+    var history = citySearchEl.value.trim();
+     console.log(history)
+
+    var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
+    if (lastSearch === null) {
+        lastSearch = [];
+        lastSearch.push(history);
+    } else {
+        lastSearch.push(history);
+    }
+
+    localStorage.setItem('searchHistory', JSON.stringify(lastSearch));
+
+    displaySearchHistory();
 };
