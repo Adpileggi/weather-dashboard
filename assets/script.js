@@ -3,17 +3,19 @@ var citySearchEl = document.querySelector('#city-input');
 var searchBtn = document.querySelector('#search-btn');
 
 var HistoryBtnEl = document.querySelector('#search-history-btn');
+var historyBtn = document.querySelector('.history-btn')
 
-var currentWeatherEl = document.querySelector('.current-weather-el');
-var futureWeatherEl = document.querySelector('.future-weather-el');
+var currentWeatherEl = document.querySelector('#current-weather-el');
+var futureWeatherEl = document.querySelector('#future-weather-el');
 
 var apiUrl;
+var currentCity;
 
-displaySearchHistory()
+// displaySearchHistory()
 searchBtn.addEventListener('click', getSearchHandler);
+// historyBtn.addEventListener('click', getSearchHandler);
 
 function getSearchHandler(event) {
-    // find a way to remove all spaces?
     var findCity = citySearchEl.value.trim();
     apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + findCity + '&appid=ac772410ddc838ce4708a6abf9efd783&units=imperial';
     console.log(apiUrl);
@@ -28,9 +30,10 @@ function getCurrentWeather() {
         })
         .then(function (data) {
             console.log(data);
-
+            
+            // currentCity = data.city.name
             var h2 = document.createElement('h2') 
-            h2.textContent = (citySearchEl.value.trim() + ' -- ' + data.list[0].dt_txt)
+            h2.textContent = (data.city.name + ' -- ' + dayjs(data.list[0].dt_txt).format('MMM-D'));
             var p = document.createElement('p')
             p.textContent = ('Tempature: ' + data.list[0].main.temp)
            
@@ -54,43 +57,50 @@ function getForcastWeather() {
                 console.log(data.list[i].main.temp);
                 console.log(data.list[i].dt_txt);
 
+                var divCard = document.createElement('div');
+                divCard.classList = 'card'
+
                 var forcastDiv = document.createElement('div');
-                forcastDiv.classList = 'forcast-card'
-                var ul = document.createElement('ul')
-                var forcastDate = document.createElement('li');
-                forcastDate.textContent = (data.list[i].dt_txt);
-                var forcastTemp = document.createElement('li');
+                forcastDiv.classList = 'card-body'
+                                
+                var forcastDate = document.createElement('h2');
+                forcastDate.classList= 'card-title'
+                forcastDate.textContent = dayjs(data.list[i].dt_txt).format('MMM-D');
+                
+                var forcastTemp = document.createElement('p');
+                forcastTemp.classList= 'card-text'
                 forcastTemp.textContent = ('Tempature: ' + data.list[i].main.temp);
 
-                forcastDiv.appendChild(ul)
-
-                ul.appendChild(forcastDate);
+                forcastDiv.appendChild(forcastDate);
                 
-                ul.appendChild(forcastTemp);
+                forcastDiv.appendChild(forcastTemp);
 
-                futureWeatherEl.appendChild(forcastDiv);
+                divCard.appendChild(forcastDiv);
+
+                futureWeatherEl.appendChild(divCard);
 
             };
         });
 
 };
 
-function renderSearchHistory() {
-    var history = citySearchEl.value.trim();
-     console.log(history)
+function renderSearchHistory(data) {
+    
+        var history = citySearchEl.value.trim()
+        console.log(history)
 
-    var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
-    if (lastSearch === null) {
-        lastSearch = [];
-        lastSearch.push(history);
-    } else {
-        lastSearch.push(history);
+        var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
+        if (lastSearch === null) {
+            lastSearch = [];
+            lastSearch.push(history);
+        } else {
+            lastSearch.push(history);
+        }
+
+        localStorage.setItem('searchHistory', JSON.stringify(lastSearch));
+
+        displaySearchHistory();
     }
-
-    localStorage.setItem('searchHistory', JSON.stringify(lastSearch));
-
-    displaySearchHistory();
-};
 
 function displaySearchHistory() {
     var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
@@ -100,7 +110,7 @@ function displaySearchHistory() {
         displaySearch = lastSearch[i];
 
         var lastSearchBtn = document.createElement('button')
-        lastSearchBtn.classList = 'history-btn'
+        lastSearchBtn.classList = 'history-btn btn btn-secondary'
         lastSearchBtn.textContent = displaySearch
 
         HistoryBtnEl.appendChild(lastSearchBtn);
