@@ -32,14 +32,33 @@ function getCurrentWeather() {
             console.log(data);
             
             // currentCity = data.city.name
-            var h2 = document.createElement('h2') 
-            h2.textContent = (data.city.name + ' -- ' + dayjs(data.list[0].dt_txt).format('MMM-D'));
-            var p = document.createElement('p')
-            p.textContent = ('Tempature: ' + data.list[0].main.temp)
-           
-            h2.appendChild(p)
+            var divCard = document.createElement('div');
+            divCard.classList = 'card'
 
-            currentWeatherEl.appendChild(h2)
+            var currentWeatherDiv = document.createElement('div');
+            currentWeatherDiv.classList = 'card-body'
+
+            var h2 = document.createElement('h2')
+            h2.classList ='card-title' 
+            h2.textContent = (data.city.name + ' -- ' + dayjs(data.list[0].dt_txt).format('MMM-D'));
+            
+            var pTemp = document.createElement('p')
+            pTemp.classList= 'card-text'
+            pTemp.textContent = ('Tempature: ' + data.list[0].main.temp)
+
+            var pHumidity = document.createElement('p')
+            pHumidity.classList= 'card-text'
+            pHumidity.textContent = ('Humidity: ' + data.list[0].main.humidity)
+
+            var pWind = document.createElement('p')
+            pWind.classList= 'card-text'
+            pWind.textContent = ('Windspeed: ' + data.list[0].wind.speed)
+           
+            divCard.append(h2, pTemp, pHumidity, pWind)
+
+            divCard.appendChild(currentWeatherDiv)
+
+            currentWeatherEl.appendChild(divCard)
 
         })
         getForcastWeather();
@@ -63,7 +82,7 @@ function getForcastWeather() {
                 var forcastDiv = document.createElement('div');
                 forcastDiv.classList = 'card-body'
                                 
-                var forcastDate = document.createElement('h2');
+                var forcastDate = document.createElement('h3');
                 forcastDate.classList= 'card-title'
                 forcastDate.textContent = dayjs(data.list[i].dt_txt).format('MMM-D');
                 
@@ -71,9 +90,13 @@ function getForcastWeather() {
                 forcastTemp.classList= 'card-text'
                 forcastTemp.textContent = ('Tempature: ' + data.list[i].main.temp);
 
-                forcastDiv.appendChild(forcastDate);
-                
-                forcastDiv.appendChild(forcastTemp);
+                var forcastHumidity = document.createElement('p')
+                forcastHumidity.textContent = ('Humidity: ' + data.list[i].main.humidity)
+
+                var forcastWind = document.createElement('p')
+                forcastWind.textContent = ('Windspeed: ' + data.list[i].wind.speed)
+
+                forcastDiv.append(forcastDate, forcastTemp, forcastHumidity, forcastWind);
 
                 divCard.appendChild(forcastDiv);
 
