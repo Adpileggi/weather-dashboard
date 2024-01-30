@@ -3,15 +3,16 @@ var citySearchEl = document.querySelector('#city-input');
 var searchBtn = document.querySelector('#search-btn');
 
 var HistoryBtnEl = document.querySelector('#search-history-btn');
-var historyBtn = document.querySelector('.history-btn')
+
 
 var currentWeatherEl = document.querySelector('#current-weather-el');
 var futureWeatherEl = document.querySelector('#future-weather-el');
 
+
 var apiUrl;
 var currentCity;
 
-// displaySearchHistory()
+
 searchBtn.addEventListener('click', getSearchHandler);
 // historyBtn.addEventListener('click', getSearchHandler);
 
@@ -27,11 +28,14 @@ function getCurrentWeather() {
     fetch(apiUrl)
         .then(function(responce){
             return responce.json();
+            // make an if statement for okay and error responces
         })
         .then(function (data) {
             console.log(data);
+            // if error show it and return
             
-            // currentCity = data.city.name
+            currentWeatherEl.innerHTML = "";
+
             var divCard = document.createElement('div');
             divCard.classList = 'card'
 
@@ -69,6 +73,7 @@ function getCurrentWeather() {
         })
         getForcastWeather();
         renderSearchHistory();
+        // include else for error
 };
 
 function getForcastWeather() {
@@ -77,6 +82,8 @@ function getForcastWeather() {
             return responce.json();
         })
         .then(function (data) {
+
+            futureWeatherEl.innerHTML = '';
             // use loop for future weather
             for (var i = 7; i < data.list.length; i+=8) {
                 console.log(data.list[i].main.temp);
@@ -130,9 +137,15 @@ function renderSearchHistory(data) {
         if (lastSearch === null) {
             lastSearch = [];
             lastSearch.push(history);
-        } else {
+        } else if (history === '' || lastSearch.includes(history)) { 
+            console.log()
+        }
+        else {
             lastSearch.push(history);
         }
+        // when clicked it creates a new blank button
+        // if input is blank, don't add anthing
+        // if input exist inside of the histor section 
 
         localStorage.setItem('searchHistory', JSON.stringify(lastSearch));
 
@@ -142,9 +155,12 @@ function renderSearchHistory(data) {
 function displaySearchHistory() {
     var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
 
+    HistoryBtnEl.innerHTML = '';
+
     for (var i = 0; i < lastSearch.length; i++) {
         var displaySearch = []
         displaySearch = lastSearch[i];
+
 
         var lastSearchBtn = document.createElement('button')
         lastSearchBtn.classList = 'history-btn btn btn-secondary'
@@ -154,3 +170,18 @@ function displaySearchHistory() {
 
     }
 }
+
+function historySearch(event) { 
+    var getCity = event.target.textContent
+        apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + getCity + '&appid=ac772410ddc838ce4708a6abf9efd783&units=imperial';
+        console.log(apiUrl);
+    
+        getCurrentWeather();
+};
+
+
+
+displaySearchHistory()
+// var HistoryBtnEl = document.querySelectorAll('.history-btn')
+HistoryBtnEl.addEventListener('click', historySearch);
+console.log(HistoryBtnEl)
