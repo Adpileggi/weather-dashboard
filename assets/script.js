@@ -27,12 +27,15 @@ function getSearchHandler(event) {
 function getCurrentWeather() {
     fetch(apiUrl)
         .then(function(responce){
+                if (responce.status > 399){
+                alert('Error: ' + responce.statusText)
+                return;
+            }
             return responce.json();
-            // make an if statement for okay and error responces
         })
         .then(function (data) {
+        
             console.log(data);
-            // if error show it and return
             
             currentWeatherEl.innerHTML = "";
 
@@ -73,12 +76,16 @@ function getCurrentWeather() {
         })
         getForcastWeather();
         renderSearchHistory();
-        // include else for error
+        
 };
 
 function getForcastWeather() {
     fetch(apiUrl)
         .then(function(responce){
+            if (responce.status > 399){
+                alert('Error: ' + responce.statusText)
+                return;
+            }
             return responce.json();
         })
         .then(function (data) {
