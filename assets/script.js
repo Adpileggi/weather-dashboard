@@ -67,7 +67,7 @@ function getCurrentWeather() {
             pWind.classList= 'card-text'
             pWind.textContent = ('Windspeed: ' + data.list[0].wind.speed)
            
-            divCard.append(currentIcon, h2, pTemp, pHumidity, pWind)
+            currentWeatherDiv.append(currentIcon, h2, pTemp, pHumidity, pWind)
 
             divCard.appendChild(currentWeatherDiv)
 
