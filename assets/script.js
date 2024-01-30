@@ -14,7 +14,7 @@ var currentCity;
 
 
 searchBtn.addEventListener('click', getSearchHandler);
-// historyBtn.addEventListener('click', getSearchHandler);
+searchBtn.addEventListener('click', displaySearchHistory);
 
 function getSearchHandler(event) {
     var findCity = citySearchEl.value.trim();
@@ -187,8 +187,5 @@ function historySearch(event) {
 };
 
 
-
-displaySearchHistory()
-// var HistoryBtnEl = document.querySelectorAll('.history-btn')
 HistoryBtnEl.addEventListener('click', historySearch);
 console.log(HistoryBtnEl)
