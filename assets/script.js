@@ -38,6 +38,12 @@ function getCurrentWeather() {
             var currentWeatherDiv = document.createElement('div');
             currentWeatherDiv.classList = 'card-body'
 
+            var currentIcon = document.createElement('img')
+            currentIcon.classList ='card-title'
+            currentIcon.setAttribute('src', 'https://openweathermap.org/img/wn/' + data.list[0].weather[0].icon + '.png');
+            currentIcon.setAttribute('height', '50px')
+            currentIcon.setAttribute('width', '50px')
+
             var h2 = document.createElement('h2')
             h2.classList ='card-title' 
             h2.textContent = (data.city.name + ' -- ' + dayjs(data.list[0].dt_txt).format('MMM-D'));
@@ -54,7 +60,7 @@ function getCurrentWeather() {
             pWind.classList= 'card-text'
             pWind.textContent = ('Windspeed: ' + data.list[0].wind.speed)
            
-            divCard.append(h2, pTemp, pHumidity, pWind)
+            divCard.append(currentIcon, h2, pTemp, pHumidity, pWind)
 
             divCard.appendChild(currentWeatherDiv)
 
@@ -81,6 +87,14 @@ function getForcastWeather() {
 
                 var forcastDiv = document.createElement('div');
                 forcastDiv.classList = 'card-body'
+
+                var forcastIcon = document.createElement('img')
+                forcastIcon.classList = "card-title"
+                forcastIcon.setAttribute('src', 'https://openweathermap.org/img/wn/' + data.list[i].weather[0].icon + '.png');
+                forcastIcon.setAttribute('height', '50px')
+                forcastIcon.setAttribute('width', '50px')
+
+                forcastIcon.textContent = data.list[i].weather.icon
                                 
                 var forcastDate = document.createElement('h3');
                 forcastDate.classList= 'card-title'
@@ -96,7 +110,7 @@ function getForcastWeather() {
                 var forcastWind = document.createElement('p')
                 forcastWind.textContent = ('Windspeed: ' + data.list[i].wind.speed)
 
-                forcastDiv.append(forcastDate, forcastTemp, forcastHumidity, forcastWind);
+                forcastDiv.append(forcastIcon, forcastDate, forcastTemp, forcastHumidity, forcastWind);
 
                 divCard.appendChild(forcastDiv);
 
