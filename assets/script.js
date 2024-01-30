@@ -187,7 +187,5 @@ function historySearch(event) {
 };
 
 
-
-// var HistoryBtnEl = document.querySelectorAll('.history-btn')
 HistoryBtnEl.addEventListener('click', historySearch);
 console.log(HistoryBtnEl)
