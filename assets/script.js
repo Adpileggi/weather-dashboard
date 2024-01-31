@@ -12,10 +12,10 @@ var futureWeatherEl = document.querySelector('#future-weather-el');
 var apiUrl;
 var currentCity;
 
-
+// event listiner for search button
 searchBtn.addEventListener('click', getSearchHandler);
-searchBtn.addEventListener('click', displaySearchHistory);
 
+// creates weather api from search value
 function getSearchHandler(event) {
     var findCity = citySearchEl.value.trim();
     apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + findCity + '&appid=ac772410ddc838ce4708a6abf9efd783&units=imperial';
@@ -24,9 +24,11 @@ function getSearchHandler(event) {
     getCurrentWeather();
 };
 
+// calls information from api
 function getCurrentWeather() {
     fetch(apiUrl)
         .then(function(responce){
+            // Display error if api call does not suceed
                 if (responce.status > 399){
                 alert('Error: ' + responce.statusText)
                 return;
@@ -36,9 +38,10 @@ function getCurrentWeather() {
         .then(function (data) {
         
             console.log(data);
-            
+            // clear any existing html
             currentWeatherEl.innerHTML = "";
 
+            // append weather data to html
             var divCard = document.createElement('div');
             divCard.classList = 'card'
 
@@ -79,8 +82,10 @@ function getCurrentWeather() {
         
 };
 
+// use api to create 5 day forcast
 function getForcastWeather() {
     fetch(apiUrl)
+        // Display error if api call does not suceed
         .then(function(responce){
             if (responce.status > 399){
                 alert('Error: ' + responce.statusText)
@@ -89,13 +94,14 @@ function getForcastWeather() {
             return responce.json();
         })
         .then(function (data) {
-
+            // clear any existing html
             futureWeatherEl.innerHTML = '';
-            // use loop for future weather
+            // use loop for future weather and append to html
             for (var i = 7; i < data.list.length; i+=8) {
                 console.log(data.list[i].main.temp);
                 console.log(data.list[i].dt_txt);
 
+                // append new html elements
                 var divCard = document.createElement('div');
                 divCard.classList = 'card'
 
@@ -136,23 +142,19 @@ function getForcastWeather() {
 };
 
 function renderSearchHistory(data) {
-    
+    // render items into local storage
         var history = citySearchEl.value.trim()
         console.log(history)
-
+    // make lastsearch an array, check to see that all values are unique, then add to the array
         var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
         if (lastSearch === null) {
             lastSearch = [];
-            lastSearch.push(history);
         } else if (history === '' || lastSearch.includes(history)) { 
             console.log()
         }
         else {
             lastSearch.push(history);
         }
-        // when clicked it creates a new blank button
-        // if input is blank, don't add anthing
-        // if input exist inside of the histor section 
 
         localStorage.setItem('searchHistory', JSON.stringify(lastSearch));
 
@@ -161,14 +163,17 @@ function renderSearchHistory(data) {
 
 function displaySearchHistory() {
     var lastSearch = JSON.parse(localStorage.getItem('searchHistory'))
-
     HistoryBtnEl.innerHTML = '';
+    // if the last seach array is empty do not contiune to run the function
+    if (lastSearch === null) {
+        return;
+    }
 
     for (var i = 0; i < lastSearch.length; i++) {
         var displaySearch = []
         displaySearch = lastSearch[i];
 
-
+// append previous searchs as buttons to hml
         var lastSearchBtn = document.createElement('button')
         lastSearchBtn.classList = 'history-btn btn btn-secondary'
         lastSearchBtn.textContent = displaySearch
@@ -178,6 +183,7 @@ function displaySearchHistory() {
     }
 }
 
+// event listiner for when a history button is clicked
 function historySearch(event) { 
     var getCity = event.target.textContent
         apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + getCity + '&appid=ac772410ddc838ce4708a6abf9efd783&units=imperial';
@@ -186,6 +192,8 @@ function historySearch(event) {
         getCurrentWeather();
 };
 
-
+// event listener for history buttons
 HistoryBtnEl.addEventListener('click', historySearch);
-console.log(HistoryBtnEl)
+console.log(HistoryBtnEl);
+// display information from local storage upon loading
+displaySearchHistory();
